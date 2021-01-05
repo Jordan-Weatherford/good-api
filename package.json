@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js -p 3001"
+    "start": "node index.js"
   },
   "author": "Jordan Russell Weatherord",
   "license": "ISC",

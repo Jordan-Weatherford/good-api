@@ -18,9 +18,10 @@ const path = __dirname + '/build/'
 
 mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
     app.use(express.static(path))
+    // serve up front end
     app.get('/', function (req,res) {
-        res.sendFile(path + "index.html");
-      });
+        res.sendFile(path + "index.html")
+    })
 
 
 

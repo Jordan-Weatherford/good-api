@@ -13,7 +13,7 @@ const { DB_URL } = require('./variables')
 
 
 
-const path = __dirname + '/views/'
+const path = __dirname + '/build/'
 
 
 mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {

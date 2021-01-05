@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const apiRoutes = require('./routes/api')
+const { PORT } = require('./variables')
 
 
 // connect to database
@@ -19,6 +20,6 @@ mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).th
     app.use('/', (req, res) => {
         res.send('Goods API')
     })
-    app.listen(3001)    
+    app.listen(PORT)    
 })
 

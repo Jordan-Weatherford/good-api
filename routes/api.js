@@ -3,13 +3,13 @@ const router = express.Router()
 
 const stripe = require('stripe')('sk_test_51HEhAgAX9HHAr5HrckEg58RbsULsbnqZSl2Hx6CITkspOuZmDuQHfmDta8m2TAzbsbC049InVUm8ZdgyiPEYXI9G00sTbO1JkT');
 
-const { DOMAIN } = require('../variables')
+const { DOMAIN, BUCKET } = require('../variables')
 const Product = require('../models/Product')
 
 
 // get all products
 router.get('/products', async (req, res) => {
-    const products = await Product.find()
+	const products = await Product.find()
 
     res.send(products)
 })
@@ -35,7 +35,7 @@ router.post('/create-checkout-session', async (req, res) => {
 				currency: 'usd',
 				product_data: {
 					name: item.name,
-					images: [item.image_url]
+					images: [`${BUCKET}/product_images/${item.name}/${item.images[0]}`]
 				},
 				// convert dollar amount to cents for Stripe API
 				unit_amount: item.price * 100

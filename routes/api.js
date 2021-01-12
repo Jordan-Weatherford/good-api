@@ -29,6 +29,7 @@ router.get('/products/:slug', async (req, res) => {
 
 // create checkout session
 router.post('/create-checkout-session', async (req, res) => {
+	console.log('req.body---', req.body)
     let lineItems = req.body.map(item => (
 		{
 			price_data: {
@@ -46,14 +47,15 @@ router.post('/create-checkout-session', async (req, res) => {
 
 
     const session = await stripe.checkout.sessions.create({
-	  payment_method_types: ['card'],
-	  line_items: lineItems,
-      mode: 'payment',
-      success_url: `${DOMAIN}/success`,
-      cancel_url: `${DOMAIN}/canceled`,
-    });
-    res.json({ id: session.id });
-});
+		payment_method_types: ['card'],
+		line_items: lineItems,
+		mode: 'payment',
+		success_url: `${DOMAIN}/success`,
+		cancel_url: `${DOMAIN}/canceled`,
+	}).catch(err => console.log(err))
+	
+    res.json({ id: session.id })
+})
   
 
 

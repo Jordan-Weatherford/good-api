@@ -9,6 +9,7 @@ const Product = require('../models/Product')
 
 // get all products
 router.get('/products', async (req, res) => {
+	console.log(111111111)
 	const products = await Product.find()
 
     res.send(products)

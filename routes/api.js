@@ -9,7 +9,6 @@ const Product = require('../models/Product')
 
 // get all products
 router.get('/products', async (req, res) => {
-	console.log(111111111)
 	const products = await Product.find()
 
     res.send(products)
@@ -53,7 +52,7 @@ router.post('/create-checkout-session', async (req, res) => {
 		mode: 'payment',
 		success_url: `${DOMAIN}/success`,
 		cancel_url: `${DOMAIN}/canceled`,
-	}).catch(err => console.log(err))
+	})
 	
     res.json({ id: session.id })
 })

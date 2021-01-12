@@ -11,13 +11,6 @@ const { DB_URL, PORT } = require('./variables')
 
 console.log("DB URL === ", DB_URL)
 
-// app.use(cors({origin: '*'}))
-// app.use('/', (req, res) => {
-//     res.send('yeyeyeye')
-// })
-
-// app.listen(process.env.PORT)
-
 
 mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
     app.use(cors({origin: '*'}))

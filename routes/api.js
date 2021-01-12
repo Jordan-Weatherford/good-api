@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
-const stripe = require('stripe')('sk_test_51HEhAgAX9HHAr5HrckEg58RbsULsbnqZSl2Hx6CITkspOuZmDuQHfmDta8m2TAzbsbC049InVUm8ZdgyiPEYXI9G00sTbO1JkT');
 
-const { DOMAIN, BUCKET } = require('../variables')
+const { DOMAIN, BUCKET, STRIPE_KEY } = require('../variables')
 const Product = require('../models/Product')
 
+const stripe = require('stripe')(STRIPE_KEY);
 
 // get all products
 router.get('/products', async (req, res) => {

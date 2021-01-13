@@ -7,8 +7,10 @@ const Product = require('../models/Product')
 
 const stripe = require('stripe')(STRIPE_KEY);
 
+
 // get all products
 router.get('/products', async (req, res) => {
+	console.log('products route hit')
 	const products = await Product.find()
 
     res.send(products)
@@ -17,6 +19,8 @@ router.get('/products', async (req, res) => {
 
 // get single product by 'slug'
 router.get('/products/:slug', async (req, res) => {
+	console.log('products slug route hit')
+	
     const slug = req.params.slug
     const product = await Product.findOne({ slug })
 
@@ -29,8 +33,9 @@ router.get('/products/:slug', async (req, res) => {
 
 // create checkout session
 router.post('/create-checkout-session', async (req, res) => {
-	console.log('req.body---', req.body)
-    let lineItems = req.body.map(item => (
+	console.log('create checkout session route hit')
+
+    let lineItems = await req.body.map(item => (
 		{
 			price_data: {
 				currency: 'usd',
@@ -45,16 +50,22 @@ router.post('/create-checkout-session', async (req, res) => {
 		}
 	))
 
-
-    const session = await stripe.checkout.sessions.create({
+	stripe.checkout.sessions.create({
 		payment_method_types: ['card'],
 		line_items: lineItems,
 		mode: 'payment',
 		success_url: `${DOMAIN}/success`,
 		cancel_url: `${DOMAIN}/canceled`,
+	}).then(session => {
+		res.json({ success: true, id: session.id })
+	}).catch(error => {
+		res.send({ success: false, message: error.message })
 	})
-	
-    res.json({ id: session.id })
+})
+
+
+router.get('/', (req, res) => {
+	res.send('caught ya')
 })
   
 

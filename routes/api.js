@@ -36,8 +36,12 @@ router.post('/create-checkout-session', async (req, res) => {
 	console.log('create checkout session route hit')
 	console.log('stipe key =====', STRIPE_KEY)
 
-    let lineItems = await req.body.map(item => (
-		{
+	let lineItems = await req.body.map(item => {
+		console.log("===============================================")
+		console.log(item.images)
+		console.log("-----------------------------------------------")		
+
+		return({
 			price_data: {
 				currency: 'usd',
 				product_data: {
@@ -49,11 +53,8 @@ router.post('/create-checkout-session', async (req, res) => {
 			},
 			quantity: item.qty
 		}
-	))
-
-	console.log("===============================================")
-	console.log(lineItems)
-	console.log("-----------------------------------------------")
+		)}
+	)
 
 	stripe.checkout.sessions.create({
 		payment_method_types: ['card'],

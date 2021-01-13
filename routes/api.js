@@ -34,6 +34,7 @@ router.get('/products/:slug', async (req, res) => {
 // create checkout session
 router.post('/create-checkout-session', async (req, res) => {
 	console.log('create checkout session route hit')
+	console.log('stipe key =====', STRIPE_KEY)
 
     let lineItems = await req.body.map(item => (
 		{

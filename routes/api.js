@@ -36,10 +36,11 @@ router.post('/create-checkout-session', async (req, res) => {
 	console.log('create checkout session route hit')
 	console.log('stipe key =====', STRIPE_KEY)
 
-	let lineItems = await req.body.map(item => {
+	let lineItems = await req.body.map(async item => {
 		console.log("===============================================")
 		// get item price from database in case of frontend manipulators!
-		const matchedItem = Product.findOne({ _id: item._id })
+		const matchedItem = await Product.findOne({ _id: item._id })
+		console.log(matchedItem)
 		console.log("-----------------------------------------------")		
 
 		return({

@@ -38,7 +38,8 @@ router.post('/create-checkout-session', async (req, res) => {
 
 	let lineItems = await req.body.map(item => {
 		console.log("===============================================")
-		console.log(item.images)
+		// get item price from database in case of frontend manipulators!
+		const matchedItem = await Product.findOne({ _id: item._id })
 		console.log("-----------------------------------------------")		
 
 		return({
@@ -49,7 +50,7 @@ router.post('/create-checkout-session', async (req, res) => {
 					images: [`${BUCKET}/product_images/${item.slug}/${item.images[0]}`]
 				},
 				// convert dollar amount to cents for Stripe API
-				unit_amount: item.price * 100
+				unit_amount: matchedItem.price * 100
 			},
 			quantity: item.qty
 		}

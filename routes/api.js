@@ -39,7 +39,7 @@ router.post('/create-checkout-session', async (req, res) => {
 	let lineItems = await req.body.map(item => {
 		console.log("===============================================")
 		// get item price from database in case of frontend manipulators!
-		const matchedItem = await Product.findOne({ _id: item._id })
+		const matchedItem = Product.findOne({ _id: item._id })
 		console.log("-----------------------------------------------")		
 
 		return({

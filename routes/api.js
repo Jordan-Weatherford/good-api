@@ -34,29 +34,22 @@ router.get('/products/:slug', async (req, res) => {
 // create checkout session
 router.post('/create-checkout-session', async (req, res) => {
 	console.log('create checkout session route hit')
-	console.log('stipe key =====', STRIPE_KEY)
 
 	let lineItems = await req.body.map(item => {
-		console.log("===============================================")
 		// get item price from database in case of frontend manipulators!
-		const matchedItem = Product.findOne({ _id: item._id })
-		console.log(matchedItem.price)
-		console.log("-----------------------------------------------")		
-
-		return({
+		Product.findOne({ _id: item._id }).then(foundItem => ({
 			price_data: {
 				currency: 'usd',
 				product_data: {
-					name: item.name,
-					images: [`${BUCKET}/product_images/${item.slug}/${item.images[0]}`]
+					name: foundItem.name,
+					images: [`${BUCKET}/product_images/${item.slug}/${foundItem.images[0]}`]
 				},
 				// convert dollar amount to cents for Stripe API
-				unit_amount: matchedItem.price * 100
+				unit_amount: foundItem.price * 100
 			},
-			quantity: item.qty
-		}
-		)}
-	)
+			quantity: foundItem.qty
+		}))
+	})
 
 	stripe.checkout.sessions.create({
 		payment_method_types: ['card'],
@@ -70,6 +63,16 @@ router.post('/create-checkout-session', async (req, res) => {
 		res.send({ success: false, message: error.message })
 	})
 })
+
+
+
+
+
+
+
+
+
+
 
 
 router.get('/', (req, res) => {

@@ -3,7 +3,8 @@ const router = express.Router()
 
 
 const { DOMAIN, BUCKET, STRIPE_KEY } = require('../variables')
-const Product = require('../models/Product')
+const Product = require('../models/Product');
+const { response } = require('express');
 
 const stripe = require('stripe')(STRIPE_KEY);
 
@@ -29,27 +30,27 @@ router.get('/products/:slug', async (req, res) => {
 
 
 
-
-
 // create checkout session
 router.post('/create-checkout-session', async (req, res) => {
 	console.log('create checkout session route hit')
+	const cartItems = req.body
+	let dbItems = await Product.find({ _id: cartItems })
+	let lineItems = []
 
-	let lineItems = await req.body.map(item => {
-		// get item price from database in case of frontend manipulators!
-		Product.findOne({ _id: item._id }).then(foundItem => ({
+	for (let i = 0; i < cartItems.length; i++) {
+		console.log('loopy=', i)
+		lineItems.push({
 			price_data: {
 				currency: 'usd',
 				product_data: {
-					name: foundItem.name,
-					images: [`${BUCKET}/product_images/${item.slug}/${foundItem.images[0]}`]
+					name: dbItems[i].name,
+					images: cartItems[i].images
 				},
-				// convert dollar amount to cents for Stripe API
-				unit_amount: foundItem.price * 100
+				unit_amount: dbItems[i].price * 100
 			},
-			quantity: foundItem.qty
-		}))
-	})
+			quantity: cartItems[i].qty			
+		})
+	}
 
 	stripe.checkout.sessions.create({
 		payment_method_types: ['card'],
@@ -60,29 +61,14 @@ router.post('/create-checkout-session', async (req, res) => {
 	}).then(session => {
 		res.json({ success: true, id: session.id })
 	}).catch(error => {
+		console.log(error)
 		res.send({ success: false, message: error.message })
 	})
 })
 
 
-
-
-
-
-
-
-
-
-
-
 router.get('/', (req, res) => {
-	res.send('caught ya')
+	res.send("Error! There is nothing here")
 })
   
-
-
-
-
-
-
 module.exports = router

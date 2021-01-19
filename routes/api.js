@@ -11,7 +11,6 @@ const stripe = require('stripe')(STRIPE_KEY);
 
 // get all products
 router.get('/products', async (req, res) => {
-	console.log('products route hit')
 	const products = await Product.find()
 
     res.send(products)
@@ -19,9 +18,7 @@ router.get('/products', async (req, res) => {
 
 
 // get single product by 'slug'
-router.get('/products/:slug', async (req, res) => {
-	console.log('products slug route hit')
-	
+router.get('/products/:slug', async (req, res) => {	
     const slug = req.params.slug
     const product = await Product.findOne({ slug })
 
@@ -32,13 +29,12 @@ router.get('/products/:slug', async (req, res) => {
 
 // create checkout session
 router.post('/create-checkout-session', async (req, res) => {
-	console.log('create checkout session route hit')
 	const cartItems = req.body
+
 	let dbItems = await Product.find({ _id: cartItems })
 	let lineItems = []
 
 	for (let i = 0; i < cartItems.length; i++) {
-		console.log('loopy=', i)
 		lineItems.push({
 			price_data: {
 				currency: 'usd',

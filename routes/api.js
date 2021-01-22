@@ -1,12 +1,13 @@
 const express = require('express')
+
 const router = express.Router()
 
-
 const { DOMAIN, BUCKET, STRIPE_KEY } = require('../variables')
-const Product = require('../models/Product');
-const { response } = require('express');
+const Product = require('../models/Product')
+const db = require('../index')
 
-const stripe = require('stripe')(STRIPE_KEY);
+
+const stripe = require('stripe')(STRIPE_KEY)
 
 
 // get all products
@@ -29,7 +30,7 @@ router.get('/products/:slug', async (req, res) => {
 
 // create checkout session
 router.post('/create-checkout-session', async (req, res) => {
-	const cartItems = req.body
+	const cartItems = req.body.cart
 
 	let dbItems = await Product.find({ _id: cartItems })
 	let lineItems = []
@@ -54,6 +55,9 @@ router.post('/create-checkout-session', async (req, res) => {
 		mode: 'payment',
 		success_url: `${DOMAIN}/success`,
 		cancel_url: `${DOMAIN}/cart`,
+		shipping_address_collection: {
+			allowed_countries: ['US']
+		}
 	}).then(session => {
 		res.json({ success: true, id: session.id })
 	}).catch(error => {

@@ -25,4 +25,4 @@ mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).th
     res.send(error)
 }))
 
-app.listen(PORT)    
+app.listen(PORT)

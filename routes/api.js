@@ -4,10 +4,19 @@ const router = express.Router()
 
 const { DOMAIN, BUCKET, STRIPE_KEY } = require('../variables')
 const Product = require('../models/Product')
+const Testimonials = require('../models/Testimonial')
 const db = require('../index')
+const Testimonial = require('../models/Testimonial')
 
 
 const stripe = require('stripe')(STRIPE_KEY)
+
+// get all testimonials
+router.get('/testimonials', async (req, res) => {
+	const testimonials = await Testimonial.find()
+
+	res.send(testimonials)
+})
 
 
 // get all products

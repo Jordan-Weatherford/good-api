@@ -19,6 +19,7 @@ router.get('/testimonials', async (req, res) => {
 })
 
 
+
 // get all products
 router.get('/products', async (req, res) => {
 	const products = await Product.find()

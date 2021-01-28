@@ -15,7 +15,7 @@ const stripe = require('stripe')(STRIPE_KEY)
 router.get('/testimonials', async (req, res) => {
 	const testimonials = await Testimonial.find()
 
-	res.send(testimonials)
+	res.send(testimonials)		
 })
 
 
